@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidationArguments,
 } from 'class-validator';
-import { cpf, cnpj } from 'cpf-cnpj-validator';
+import { cnpj, cpf } from 'cpf-cnpj-validator';
 
 @ValidatorConstraint({ name: 'documentValidator', async: false })
 export class DocumentValidator implements ValidatorConstraintInterface {
