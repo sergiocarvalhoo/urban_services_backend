@@ -29,4 +29,7 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`Documentação disponível em: http://localhost:${port}/api`);
 }
-bootstrap();
+bootstrap().catch((error) => {
+  console.error('Erro ao iniciar a aplicação:', error);
+  process.exit(1);
+});
