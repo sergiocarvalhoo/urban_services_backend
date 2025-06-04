@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/unbound-method */
+import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ServiceRequestsService } from './service-requests.service';
-import { PrismaService } from '../prisma/prisma.service';
-import { ServiceType } from '../enums/service-type.enum';
 import { RequestStatus } from '../enums/request-status.enum';
+import { ServiceType } from '../enums/service-type.enum';
+import { PrismaService } from '../prisma/prisma.service';
+import { ServiceRequestsService } from './service-requests.service';
 
 describe('Solicitação de Serviço', () => {
   let service: ServiceRequestsService;
   let prisma: PrismaService;
 
-  // Mock de uma solicitação de serviço
   const mockSolicitacao = {
     id: 1,
     type: ServiceType.LAMP_REPLACEMENT,
@@ -32,6 +32,7 @@ describe('Solicitação de Serviço', () => {
             serviceRequest: {
               create: jest.fn().mockResolvedValue(mockSolicitacao),
               findMany: jest.fn().mockResolvedValue([mockSolicitacao]),
+              update: jest.fn().mockResolvedValue(mockSolicitacao),
             },
           },
         },
@@ -62,6 +63,46 @@ describe('Solicitação de Serviço', () => {
       expect(prisma.serviceRequest.create).toHaveBeenCalledWith({
         data: novaSolicitacao,
       });
+    });
+  });
+
+  describe('atualizar status', () => {
+    it('deve atualizar o status de uma solicitação com sucesso', async () => {
+      const prismaUpdateMock = jest.fn().mockResolvedValue({
+        ...mockSolicitacao,
+        status: RequestStatus.IN_PROGRESS,
+      });
+
+      jest
+        .spyOn(prisma.serviceRequest, 'update')
+        .mockImplementation(prismaUpdateMock);
+
+      const updateStatusDto = {
+        status: RequestStatus.IN_PROGRESS,
+      };
+
+      const resultado = await service.updateStatus(1, updateStatusDto);
+
+      expect(resultado.status).toBe(RequestStatus.IN_PROGRESS);
+
+      expect(prisma.serviceRequest.update).toHaveBeenCalledWith({
+        where: { id: 1 },
+        data: { status: RequestStatus.IN_PROGRESS },
+      });
+    });
+
+    it('deve lançar NotFoundException quando a solicitação não existe', async () => {
+      jest
+        .spyOn(prisma.serviceRequest, 'update')
+        .mockRejectedValue(new Error('Registro não encontrado'));
+
+      const updateStatusDto = {
+        status: RequestStatus.IN_PROGRESS,
+      };
+
+      await expect(service.updateStatus(999, updateStatusDto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });
