@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiOperation,
@@ -20,6 +21,7 @@ import { CreateServiceRequestDto } from '../dto/create-service-request.dto';
 import { UpdateServiceStatusDto } from '../dto/update-service-status.dto';
 import { ServiceType } from '../enums/service-type.enum';
 import { ServiceRequestsService } from './service-requests.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('service-requests')
 @Controller('service-requests')
@@ -48,6 +50,7 @@ export class ServiceRequestsController {
   }
 
   @Patch(':id/status')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Atualizar status da solicitação' })
   @ApiParam({ name: 'id', example: 1 })
   updateStatus(

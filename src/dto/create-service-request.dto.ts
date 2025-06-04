@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString, Validate } from 'class-validator';
 import { DocumentValidator } from 'src/validators/document.validator';
@@ -42,6 +41,6 @@ export class CreateServiceRequestDto {
     description: 'CPF ou CNPJ do solicitante',
   })
   @IsString()
-  // @Validate(DocumentValidator)
+  @Validate(DocumentValidator)
   document!: string;
 }

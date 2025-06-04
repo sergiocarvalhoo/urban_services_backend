@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateServiceRequestDto } from '../dto/create-service-request.dto';
 import { UpdateServiceStatusDto } from '../dto/update-service-status.dto';
@@ -39,7 +40,6 @@ export class ServiceRequestsService {
         where: { id },
         data: { status: updateStatusDto.status },
       });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new NotFoundException(`Solicitação #${id} não encontrada`);
     }
@@ -50,7 +50,6 @@ export class ServiceRequestsService {
       return await this.prisma.serviceRequest.delete({
         where: { id },
       });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new NotFoundException(`Solicitação #${id} não encontrada`);
     }
