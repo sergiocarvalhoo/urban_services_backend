@@ -1,9 +1,17 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma/prisma.service';
 import { ServiceRequestsModule } from './service-requests/service-requests.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ServiceRequestsModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    ServiceRequestsModule,
+    AuthModule,
+  ],
   providers: [PrismaService],
   exports: [PrismaService],
 })
