@@ -21,78 +21,192 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# Urban Services API
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Backend service for managing urban service requests using NestJS, Prisma and PostgreSQL.
 
-## Project setup
+## Prerequisites
+
+- Node.js >= 20
+- Docker and Docker Compose (for containerized setup)
+- PostgreSQL (for local setup)
+
+## Environment Setup
+
+Copy the example environment file and adjust the values:
 
 ```bash
-$ npm install
+cp .env.example .env
 ```
 
-## Compile and run the project
+## Running Locally (Without Docker)
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Generate Prisma client:
+```bash
+npx prisma generate
+```
+
+3. Run database migrations:
+```bash
+npx prisma migrate deploy
+```
+
+4. Start the development server:
+```bash
+npm run start:dev
+```
+
+The API will be available at http://localhost:3000
+
+## Running with Docker
+
+1. Build and start the containers:
+```bash
+npm run docker:dev
+# or
+docker-compose up -d
+```
+
+2. View logs:
+```bash
+npm run docker:logs
+# or
+docker-compose logs -f
+```
+
+3. Stop containers:
+```bash
+npm run docker:down
+# or
+docker-compose down
+```
+
+The API will be available at http://localhost:3000
+
+## API Documentation
+
+Once the application is running, you can access the Swagger documentation at:
+http://localhost:3000/api
+
+## Default Admin User
+
+The system automatically creates a default admin user on first run:
+- Email: `admin@example.com`
+- Password: `123456`
+
+## Available Scripts
 
 ```bash
 # development
-$ npm run start
+npm run start:dev
 
-# watch mode
-$ npm run start:dev
+# production build
+npm run build
+npm run start:prod
 
-# production mode
-$ npm run start:prod
+# tests
+npm run test        # unit tests
+npm run test:e2e    # e2e tests
+npm run test:cov    # test coverage
+
+# docker commands
+npm run docker:dev   # start containers
+npm run docker:down  # stop containers
+npm run docker:logs  # view logs
 ```
 
-## Run tests
+## Project Structure
+
+```
+src/
+├── auth/           # Authentication related files
+├── dto/            # Data Transfer Objects
+├── enums/          # Enumerations
+├── prisma/         # Database connection and models
+├── service-requests/  # Service requests module
+└── validators/     # Custom validators
+```
+
+## Features
+
+- Service request management (CRUD operations)
+- JWT-based authentication
+- Role-based access control
+- PostgreSQL database with Prisma ORM
+- API documentation with Swagger
+- Docker support
+- Environment configuration
+- Input validation
+- Error handling
+
+## Testing
 
 ```bash
-# unit tests
-$ npm run test
+# Run unit tests
+npm run test
 
-# e2e tests
-$ npm run test:e2e
+# Run unit tests in watch mode
+npm run test:watch
 
-# test coverage
-$ npm run test:cov
+# Run end-to-end tests
+npm run test:e2e
+
+# Generate test coverage report
+npm run test:cov
+
+# Debug tests
+npm run test:debug
+
+# Run specific test file
+npm test service-requests.service.spec.ts
 ```
 
-## Deployment
+### Available Tests
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+The project includes tests for:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- `service-requests.controller.spec.ts`: API endpoints tests
+- `service-requests.service.spec.ts`: Business logic tests
+- `auth.controller.spec.ts`: Authentication routes tests
+- `auth.service.spec.ts`: Authentication logic tests
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+### Test Coverage Goals
+
+- Unit Tests: >80% coverage
+- E2E Tests: All critical paths tested
+- Integration Tests: Database operations verified
+
+### Test Examples
+
+```typescript
+describe('ServiceRequests', () => {
+  describe('POST /service-requests', () => {
+    it('should create new request', async () => {
+      // Tests request creation
+    });
+  });
+
+  describe('PATCH /service-requests/:id/status', () => {
+    it('should update status', async () => {
+      // Tests status update
+    });
+  });
+});
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Contributing
 
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the License - see the LICENSE file for details.
