@@ -17,11 +17,11 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateServiceRequestDto } from '../dto/create-service-request.dto';
 import { UpdateServiceStatusDto } from '../dto/update-service-status.dto';
 import { ServiceType } from '../enums/service-type.enum';
 import { ServiceRequestsService } from './service-requests.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('service-requests')
 @Controller('service-requests')
@@ -61,6 +61,7 @@ export class ServiceRequestsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Excluir uma solicitação' })
   @ApiParam({ name: 'id', example: 1 })
   @ApiResponse({
