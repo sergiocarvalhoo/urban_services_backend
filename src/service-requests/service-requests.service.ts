@@ -2,8 +2,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateServiceRequestDto } from '../dto/create-service-request.dto';
 import { UpdateServiceStatusDto } from '../dto/update-service-status.dto';
+import { RequestStatus } from '../enums/request-status.enum';
 import { ServiceType } from '../enums/service-type.enum';
 import { PrismaService } from '../prisma/prisma.service';
+
+interface FindAllParams {
+  type?: ServiceType;
+  status?: RequestStatus;
+}
 
 @Injectable()
 export class ServiceRequestsService {
@@ -15,9 +21,12 @@ export class ServiceRequestsService {
     });
   }
 
-  async findAll(type?: ServiceType) {
+  async findAll({ type, status }: FindAllParams = {}) {
     return this.prisma.serviceRequest.findMany({
-      where: type ? { type } : undefined,
+      where: {
+        ...(type && { type }),
+        ...(status && { status }),
+      },
       orderBy: { createdAt: 'desc' },
     });
   }
